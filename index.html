@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe</title>
+    <style>
+      /* CSS styles for the game */
+      .board {
+        display: flex;
+        flex-wrap: wrap;
+        width: 400px;
+        height: 400px;
+      }
+      .cell {
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="board" class="board"></div>
+    <script>
+      // JavaScript code for the game
+      var board = document.getElementById("board");
+      var cells = [];
+      var player = "X";
+
+      // Create the cells and add them to the board
+      for (var i = 0; i < 9; i++) {
+        var cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.addEventListener("click", cellClicked);
+        cells.push(cell);
+        board.appendChild(cell);
+      }
+
+      function cellClicked(event) {
+        var cell = event.target;
+        if (cell.innerHTML == "") {
+          cell.innerHTML = player;
+          checkForWin();
+          togglePlayer();
+        }
+      }
+
+      function togglePlayer() {
+        player = (player == "X") ? "O" : "X";
+      }
+
+      function checkForWin() {
+        var winningCombinations = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+        for (var i = 0; i < winningCombinations.length; i++) {
+          var combination = winningCombinations[i];
+          if (cells[combination[0]].innerHTML == player &&
+              cells[combination[1]].innerHTML == player &&
+              cells[combination[2]].innerHTML == player) {
+            alert("Player " + player + " wins!");
+            resetGame();
+            return;
+          }
+        }
+        var gameOver = true;
+        for (var i = 0; i < cells.length; i++) {
+          if (cells[i].innerHTML == "") {
+            gameOver = false;
+            break;
+          }
+        }
+        if (gameOver) {
+          alert("Game over. It's a tie!");
+          resetGame();
+        }
+      }
+
+      function resetGame() {
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].innerHTML = "";
+        }
+        player = "X";
+      }
+    </script>
+  </body>
+</html>
